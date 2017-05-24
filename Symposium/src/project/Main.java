@@ -10,7 +10,7 @@ import javax.swing.*;
 
 public class Main {
 	
-	private static int iy = 600;
+	private static int iy = 700;
 		
 	private static int clickedF;
 	private static int buttonint = 2;
@@ -20,6 +20,7 @@ public class Main {
 	private ArrayList<Integer> buttidx = new ArrayList<Integer>(); 
 	private ArrayList<JButton> barr = new ArrayList<JButton>();
 	
+	final static JPopupMenu jp = new JPopupMenu();
 	
 	//adding floors
 	private static int pathsi = 0;
@@ -39,74 +40,81 @@ public class Main {
 		f.setSize(1200,1000);//400 width and 500 height  
 		
 		JPanel game = new JPanel();
-		game.setBounds(0,0,400,600);
+		game.setOpaque(true);
 		game.setBackground(Color.blue);
+		game.setBounds(200,0,600,800);
 		
-		System.out.println("panel created");
+		
+
 		
 		ImageIcon i = new ImageIcon("resources/Lobby.png");
-		JButton b=new JButton(buttonidx,i);//creating instance of JButton  
+		Image img = i.getImage();
+		Image scaled = img.getScaledInstance(400, 150,  java.awt.Image.SCALE_SMOOTH);
+		i = new ImageIcon(scaled);
+		
+		JButton b=new JButton(i);//creating instance of JButton  
 		b.setBackground(Color.black);
 		b.setOpaque(true);
-		b.setBounds(500,100,300, 200);//x axis, y axis, width, height  
+		b.setBounds(400,150,200,200);
 		b.addActionListener(new ActionListener(){  
 			  public void actionPerformed(ActionEvent e){  
-			        game.add(makeFloor(game));
-			        
+			     game.add(makeFloor(game,f));
+			     System.out.println("buttadded");
+			    
 			          }  
 			      });  
-	
+		
+		jp.add(new JMenuItem("Upgrade"));
 		
 		
-		JScrollPane s=new JScrollPane(game); 
-		
-		
-		game.setAutoscrolls(true);
+//		JScrollPane s=new JScrollPane(game); 
+//		
+//		
+//		game.setAutoscrolls(true);
 		
 		game.add(b);//adding button in JFrame 
 		
-		System.out.println("button added");
+		
 		f.add(game);
 		
-		System.out.println("panel added");
-		
-	
+		f.setLayout(null);
 		f.setVisible(true);//making the frame visible  
-		
-		System.out.println("frame visible");
 		
 		
 		f.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+	
 		}  
 	
-	public Room makeRoom(){
-		return null;
-		
-	}
 	
-	public static JButton makeFloor(JPanel p){
+	public static JButton makeFloor(JPanel p, JFrame j){
 		ImageIcon icon = new ImageIcon("resources/" + paths[pathsi]);
 		JButton b = new JButton(buttonidx,icon);
-		b.setBounds(500,iy,400,200);
+		b.setBounds(300,iy,400,200);
 		b.setBackground(Color.black);
 		b.setOpaque(true);
 		System.out.println(buttonidx);
 		b.addActionListener(new ActionListener(){  
 			  public void actionPerformed(ActionEvent e){  
-				  upgradeFloor();
+				  jp.show(b,b.getBounds().x/4, b.getBounds().y/4
+			              + b.getBounds().height/4);
 			          }  
 			      });  
-		p.repaint();
-		buttonint++;
+		buttonint++;		
 		buttonidx = Integer.toString(buttonint);
-		iy -= 150;
+		iy -= 100;
 		pathsi++;
-		return b;
+		if(pathsi == paths.length){
+			pathsi = 0;
+		}
 		
+		p.setVisible(true);
+		p.repaint();
+		return b;
 	}
 	
-	public static void upgradeFloor(){
-		
-		
+	
+	public static void upgradeFloor(JButton b){
+		b.add(new PopupMenu());
+		  
 	}
 }
