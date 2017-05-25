@@ -88,6 +88,9 @@ public class Hotello implements Scrollable {
 	    jsp.setPreferredSize(new Dimension(200,300));
 	    jsp.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_AS_NEEDED);
 //	    jsp.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED);
+	    
+	    JScrollBar hbar = new JScrollBar(JScrollBar.HORIZONTAL, 30, 20, 0, 300);
+	    JScrollBar vbar = new JScrollBar(JScrollBar.VERTICAL, 30, 40, 0, 300);
 
 		
 		game.add(b);//adding button in JFrame 
@@ -168,7 +171,7 @@ public class Hotello implements Scrollable {
 	@Override
 	public boolean getScrollableTracksViewportHeight() {
 		// TODO Auto-generated method stub
-		return false;
+		return true;
 	}
 
 
