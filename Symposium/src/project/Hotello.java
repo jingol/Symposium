@@ -8,7 +8,7 @@ import javax.imageio.ImageIO;
 import javax.swing.*;
  
 
-public class Hotello implements Scrollable {
+public class Hotello {
 	
 		
 	private static int clickedF;
@@ -26,7 +26,7 @@ public class Hotello implements Scrollable {
 	
 	//adding floors
 	private static int pathsi = 0;
-	private static String[] paths = {"Bubblesoak_Suite.png","Haunted.png",
+	private static String[] paths = {"blue.jpg","Bubblesoak_Suite.png","Haunted.png",
 			"groovy.png","lounge.jpg","piano.png","red.png","Room.png",
 			"marble.jpg","rustic.png","zen.png","castle.jpg","dragon.png"
 			,"Honeymoon.png","Island.png","Mystik_Lounge.png","pent.jpg"
@@ -50,8 +50,8 @@ public class Hotello implements Scrollable {
 		
 		JPanel game = new JPanel();
 		game.setOpaque(true);
-		game.setBackground(new Color(255,255,255,0));
-		game.setBounds(200,0,1000,900);
+		
+
 		SpringLayout spring = new SpringLayout();
 		game.setLayout(spring);
 		
@@ -70,7 +70,10 @@ public class Hotello implements Scrollable {
 			  public void actionPerformed(ActionEvent e){  
 			     game.add(makeFloor(game));
 			     setSpringD(spring,game,barr);
-			     game.setBounds(200,0,1000,++heightmulti * 150);
+//			     spring.putConstraint(SpringLayout.SOUTH,game,ySpring,SpringLayout.SOUTH,);
+			     game.setPreferredSize(new Dimension(800,heightmulti * 200));
+			     heightmulti++;
+			     
 			     f.setVisible(true);
 			          }  
 			      });  
@@ -79,15 +82,16 @@ public class Hotello implements Scrollable {
 		
 		
 		JScrollPane jsp = new JScrollPane(game);
-//		jsp.setLayout(spring);
-		jsp.setOpaque(true);
+		jsp.getVerticalScrollBar().setUnitIncrement(20);
+		game.setPreferredSize(new Dimension(800,900));
+		
 		jsp.setBackground(Color.PINK);
 //		f.add(jsp);
-		f.setContentPane(jsp);
+//		f.setContentPane(jsp);
 		
-	    jsp.setPreferredSize(new Dimension(200,300));
+
 	    jsp.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_AS_NEEDED);
-//	    jsp.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED);
+//		  jsp.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED);
 	    
 	    JScrollBar hbar = new JScrollBar(JScrollBar.HORIZONTAL, 30, 20, 0, 300);
 	    JScrollBar vbar = new JScrollBar(JScrollBar.VERTICAL, 30, 40, 0, 300);
@@ -96,8 +100,7 @@ public class Hotello implements Scrollable {
 		game.add(b);//adding button in JFrame 
 		spring.putConstraint(SpringLayout.WEST, b, 0, SpringLayout.WEST, game);
 		
-//		f.add(game);
-//		jsp.add(game);
+		f.add(jsp);
 		f.setBackground(Color.red);
 		f.setVisible(true);//making the frame visible  
 		
@@ -112,6 +115,7 @@ public class Hotello implements Scrollable {
 		JButton b = new JButton(buttonidx,icon);
 		b.setBackground(Color.black);
 		b.setOpaque(true);
+		b.setPreferredSize(new Dimension(200,150));
 		System.out.println(buttonidx);
 		b.addActionListener(new ActionListener(){  
 			  public void actionPerformed(ActionEvent e){  
@@ -154,37 +158,11 @@ public class Hotello implements Scrollable {
 	}
 
 
-	@Override
-	public Dimension getPreferredScrollableViewportSize() {
-		// TODO Auto-generated method stub
-		return null;
+	public static void updateFloor(JButton b){
+		
 	}
-
-
-	@Override
-	public int getScrollableBlockIncrement(Rectangle arg0, int arg1, int arg2) {
-		// TODO Auto-generated method stub
-		return 0;
-	}
-
-
-	@Override
-	public boolean getScrollableTracksViewportHeight() {
-		// TODO Auto-generated method stub
-		return true;
-	}
-
-
-	@Override
-	public boolean getScrollableTracksViewportWidth() {
-		// TODO Auto-generated method stub
-		return false;
-	}
-
-
-	@Override
-	public int getScrollableUnitIncrement(Rectangle arg0, int arg1, int arg2) {
-		// TODO Auto-generated method stub
-		return 0;
+	
+	public static void createAnomaly(JButton b){
+		
 	}
 }
