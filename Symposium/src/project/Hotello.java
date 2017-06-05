@@ -8,14 +8,15 @@ import javax.imageio.ImageIO;
 import javax.swing.*;
  
 
-public class Hotello {
+public class Hotello implements Runnable{
 	
 		
 	private static int clickedF;
 	private static int buttonint = 2;
 	private static String buttonidx = "1";
-	private static int ySpring = 15;
-	private static int heightmulti = 0;
+	private static int ySpring = 160;
+	private static int heightmulti = 1;
+	 private static int bwidth = 182;
 	
 	//to upgrade buttons
 	private static ArrayList<Integer> buttidx = new ArrayList<Integer>(); 
@@ -55,6 +56,13 @@ public class Hotello {
 		SpringLayout spring = new SpringLayout();
 		game.setLayout(spring);
 		
+		JScrollPane jsp = new JScrollPane(game);
+		jsp.getVerticalScrollBar().setUnitIncrement(20);
+		game.setPreferredSize(new Dimension(800,900));
+		
+		jsp.setBackground(Color.PINK);
+//		f.add(jsp);
+//		f.setContentPane(jsp);
 		
 
 		
@@ -67,13 +75,16 @@ public class Hotello {
 		b.setBackground(Color.black);
 		b.setOpaque(true);
 		b.addActionListener(new ActionListener(){  
-			  public void actionPerformed(ActionEvent e){  
+
+			public void actionPerformed(ActionEvent e){  
 			     game.add(makeFloor(game));
 			     setSpringD(spring,game,barr);
 //			     spring.putConstraint(SpringLayout.SOUTH,game,ySpring,SpringLayout.SOUTH,);
-			     game.setPreferredSize(new Dimension(800,heightmulti * 200));
+			     game.setPreferredSize(new Dimension(800,heightmulti * bwidth));
 			     heightmulti++;
+			     bwidth--;
 			     
+			     jsp.getVerticalScrollBar().setValue(0);
 			     f.setVisible(true);
 			          }  
 			      });  
@@ -81,24 +92,15 @@ public class Hotello {
 		jp.add(new JMenuItem("Upgrade"));
 		
 		
-		JScrollPane jsp = new JScrollPane(game);
-		jsp.getVerticalScrollBar().setUnitIncrement(20);
-		game.setPreferredSize(new Dimension(800,900));
-		
-		jsp.setBackground(Color.PINK);
-//		f.add(jsp);
-//		f.setContentPane(jsp);
 		
 
-	    jsp.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_AS_NEEDED);
-//		  jsp.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED);
+	  
 	    
-	    JScrollBar hbar = new JScrollBar(JScrollBar.HORIZONTAL, 30, 20, 0, 300);
-	    JScrollBar vbar = new JScrollBar(JScrollBar.VERTICAL, 30, 40, 0, 300);
-
 		
 		game.add(b);//adding button in JFrame 
 		spring.putConstraint(SpringLayout.WEST, b, 0, SpringLayout.WEST, game);
+		spring.putConstraint(SpringLayout.EAST, b, 0, SpringLayout.EAST, game);
+		spring.putConstraint(SpringLayout.SOUTH, b, 0, SpringLayout.SOUTH, game);
 		
 		f.add(jsp);
 		f.setBackground(Color.red);
@@ -119,8 +121,7 @@ public class Hotello {
 		System.out.println(buttonidx);
 		b.addActionListener(new ActionListener(){  
 			  public void actionPerformed(ActionEvent e){  
-//				  jp.show(b,b.getBounds().x/2, b.getBounds().y/2
-//			              + b.getBounds().height/2);
+				  jp.show(b,b.getWidth()/2, b.getHeight()/2);
 				  upgradeFloor(b);
 			          }  
 			      });  		
@@ -137,6 +138,7 @@ public class Hotello {
 		p.setVisible(true);
 		p.repaint();
 		barr.add(b);
+		
 		return b;
 	}
 	
@@ -153,7 +155,7 @@ public class Hotello {
 		lay.putConstraint(SpringLayout.WEST,b,10,SpringLayout.WEST,p);
 		lay.putConstraint(SpringLayout.EAST,b,-20,SpringLayout.EAST,p);
 //		lay.putConstraint(b.NORTH, b, 400, b.SOUTH, b);
-		lay.putConstraint(SpringLayout.NORTH,b,ySpring,SpringLayout.NORTH,p);
+		lay.putConstraint(SpringLayout.SOUTH,b,-ySpring,SpringLayout.SOUTH,p);
 		ySpring += 150;
 	}
 
@@ -163,6 +165,31 @@ public class Hotello {
 	}
 	
 	public static void createAnomaly(JButton b){
+		
+	}
+	
+	public static void occupy(){
+		try {
+			Thread.sleep(5000);
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
+		
+	}
+	
+	public static void leave(){
+		
+		
+	}
+	
+	public static void generate(){
+		
+	}
+
+
+	@Override
+	public void run() {
+		
 		
 	}
 }
