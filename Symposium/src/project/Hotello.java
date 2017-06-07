@@ -16,23 +16,26 @@ public class Hotello implements Runnable{
 	private static String buttonidx = "1";
 	private static int ySpring = 160;
 	private static int heightmulti = 1;
-	 private static int bwidth = 182;
+	private static int bwidth = 182;
+	private static boolean running = false;
 	
 	//to upgrade buttons
 	private static ArrayList<Integer> buttidx = new ArrayList<Integer>(); 
 	private static ArrayList<Integer> levels = new ArrayList<Integer>();
 	private static ArrayList<JButton> barr = new ArrayList<JButton>();
+	private static ArrayList<JButton> unoccupied = new ArrayList<JButton>();
 	
 	final static JPopupMenu jp = new JPopupMenu();
 	
 	//adding floors
 	private static int pathsi = 0;
-	private static String[] paths = {"blue.jpg","Bubblesoak_Suite.png","Haunted.png",
+	private static String[] paths = {"blue.png","Bubblesoak_Suite.png","Haunted.png",
 			"groovy.png","lounge.jpg","piano.png","red.png","Room.png",
-			"marble.jpg","rustic.png","zen.png","castle.jpg","dragon.png"
-			,"Honeymoon.png","Island.png","Mystik_Lounge.png","pent.jpg"
-			,"pop.jpg","Roman.png","ruby.jpg"
+			"marble.png","rustic.png","zen.png","castle.png","dragon.png"
+			,"Honeymoon.png","Island.png","Mystik_Lounge.png","pent.png"
+			,"pop.png","Roman.png",
 			};
+	private static String[] cust = {};
 
 	
 	
@@ -61,9 +64,6 @@ public class Hotello implements Runnable{
 		game.setPreferredSize(new Dimension(800,900));
 		
 		jsp.setBackground(Color.PINK);
-//		f.add(jsp);
-//		f.setContentPane(jsp);
-		
 
 		
 		ImageIcon i = new ImageIcon("resources/Lobby.png");
@@ -87,26 +87,29 @@ public class Hotello implements Runnable{
 			     jsp.getVerticalScrollBar().setValue(0);
 			     f.setVisible(true);
 			          }  
-			      });  
+			      }); 
 		
-		jp.add(new JMenuItem("Upgrade"));
+		JMenuItem up = new JMenuItem("Upgrade");
+		up.addActionListener(new ActionListener(){  
+			public void actionPerformed(ActionEvent e){  
+			   upgradeFloor(clickedF);
+			          }  
+			      }); 
+		jp.add(up);
 		
-		
-		
-
 	  
 	    
 		
-		game.add(b);//adding button in JFrame 
-		spring.putConstraint(SpringLayout.WEST, b, 0, SpringLayout.WEST, game);
-		spring.putConstraint(SpringLayout.EAST, b, 0, SpringLayout.EAST, game);
+		game.add(b);
+		spring.putConstraint(SpringLayout.WEST, b, 10, SpringLayout.WEST, game);
+		spring.putConstraint(SpringLayout.EAST, b, -10, SpringLayout.EAST, game);
 		spring.putConstraint(SpringLayout.SOUTH, b, 0, SpringLayout.SOUTH, game);
 		
 		f.add(jsp);
 		f.setBackground(Color.red);
 		f.setVisible(true);//making the frame visible  
 		
-		
+		jsp.getVerticalScrollBar().setValue(300);
 		f.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 	
 		}  
@@ -122,7 +125,8 @@ public class Hotello implements Runnable{
 		b.addActionListener(new ActionListener(){  
 			  public void actionPerformed(ActionEvent e){  
 				  jp.show(b,b.getWidth()/2, b.getHeight()/2);
-				  upgradeFloor(b);
+				  clickedF = Integer.parseInt(b.getText());
+				  updateFloor(b);
 			          }  
 			      });  		
 		System.out.println(b.getText());
@@ -143,10 +147,9 @@ public class Hotello implements Runnable{
 	}
 	
 	
-	public static void upgradeFloor(JButton b){
-		int modify = Integer.parseInt(b.getText());
-		levels.set(modify-1,levels.get(modify-1) + 1);
-		System.out.println(levels.get(modify-1));
+	public static void upgradeFloor(int f){
+		levels.set(f-1,levels.get(f-1) + 1);
+		System.out.println(levels.get(f-1));
 		
 	}
 	
@@ -154,26 +157,35 @@ public class Hotello implements Runnable{
 		Component b = arr.get(arr.size()-1);
 		lay.putConstraint(SpringLayout.WEST,b,10,SpringLayout.WEST,p);
 		lay.putConstraint(SpringLayout.EAST,b,-20,SpringLayout.EAST,p);
-//		lay.putConstraint(b.NORTH, b, 400, b.SOUTH, b);
 		lay.putConstraint(SpringLayout.SOUTH,b,-ySpring,SpringLayout.SOUTH,p);
 		ySpring += 150;
 	}
 
 
 	public static void updateFloor(JButton b){
-		
+		//change iamge icon of the button to the floor with a resident inside
+		//alternate way:using spring layout to put each resident (harder)
+		ImageIcon org = (ImageIcon) b.getIcon();
+		ImageIcon img = new ImageIcon("resources/blue.png");
+		b.setIcon(img);
+		b.repaint();
+		Timer timer = new Timer(2000, new ActionListener() {
+		    public void actionPerformed(ActionEvent evt) {
+		    	b.setIcon(org);
+		    	b.repaint();
+		    }    
+		});
+		timer.start();
 	}
 	
-	public static void createAnomaly(JButton b){
-		
+	public static boolean createAnomaly(JButton b){
+		//based on a random chance 
+		//prevents floor from being occupied
+		return false;
 	}
 	
-	public static void occupy(){
-		try {
-			Thread.sleep(5000);
-		} catch (InterruptedException e) {
-			e.printStackTrace();
-		}
+	public static void customer(){
+		int rand = (int) (Math.random() * barr.size());
 		
 	}
 	
