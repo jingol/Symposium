@@ -8,17 +8,18 @@ import javax.imageio.ImageIO;
 import javax.swing.*;
  
 
-public class Hotello implements Runnable{
+public class Hotello extends JLayeredPane implements Runnable{
 	
 		
 	private static int clickedF;
 	private static int buttonint = 2;
 	private static String buttonidx = "1";
-	private static int ySpring = 160;
+	private static String curl = "resources/monk.png";
+	private static int ySpring = 170;
 	private static int heightmulti = 1;
 	private static int bwidth = 182;
 	private static boolean running = false;
-	
+	private static SpringLayout spring = new SpringLayout();
 	//to upgrade buttons
 	private static ArrayList<Integer> buttidx = new ArrayList<Integer>(); 
 	private static ArrayList<Integer> levels = new ArrayList<Integer>();
@@ -52,11 +53,11 @@ public class Hotello implements Runnable{
 		f.setSize(1200,800);//400 width and 500 height  
 		
 		
-		JPanel game = new JPanel();
+		JLayeredPane game = new JLayeredPane();
 		game.setOpaque(true);
 		
 
-		SpringLayout spring = new SpringLayout();
+
 		game.setLayout(spring);
 		
 		JScrollPane jsp = new JScrollPane(game);
@@ -65,10 +66,16 @@ public class Hotello implements Runnable{
 		
 		jsp.setBackground(Color.PINK);
 
+		ImageIcon a = new ImageIcon(curl);
+		JButton c = new JButton(a);
+		c.setOpaque(false);
+		c.setContentAreaFilled(false);
+		c.setBorderPainted(false);
+		
 		
 		ImageIcon i = new ImageIcon("resources/Lobby.png");
 		Image img = i.getImage();
-		Image scaled = img.getScaledInstance(400, 150,  java.awt.Image.SCALE_SMOOTH);
+		Image scaled = img.getScaledInstance(520, 160,  java.awt.Image.SCALE_SMOOTH);
 		i = new ImageIcon(scaled);
 		
 		JButton b=new JButton(i);//creating instance of JButton  
@@ -78,21 +85,24 @@ public class Hotello implements Runnable{
 
 			public void actionPerformed(ActionEvent e){  
 			     game.add(makeFloor(game));
-			     setSpringD(spring,game,barr);
+			     setSpringD(spring,game,barr,c);
 //			     spring.putConstraint(SpringLayout.SOUTH,game,ySpring,SpringLayout.SOUTH,);
 			     game.setPreferredSize(new Dimension(800,heightmulti * bwidth));
 			     heightmulti++;
 			     bwidth--;
-			     
+			     updateFloor(spring,game,barr,c);
 			     jsp.getVerticalScrollBar().setValue(0);
 			     f.setVisible(true);
 			          }  
 			      }); 
+	
+		
 		
 		JMenuItem up = new JMenuItem("Upgrade");
 		up.addActionListener(new ActionListener(){  
 			public void actionPerformed(ActionEvent e){  
 			   upgradeFloor(clickedF);
+			   
 			          }  
 			      }); 
 		jp.add(up);
@@ -101,9 +111,13 @@ public class Hotello implements Runnable{
 	    
 		
 		game.add(b);
-		spring.putConstraint(SpringLayout.WEST, b, 10, SpringLayout.WEST, game);
-		spring.putConstraint(SpringLayout.EAST, b, -10, SpringLayout.EAST, game);
+		game.add(c,0,0);
+		spring.putConstraint(SpringLayout.WEST, b, 30, SpringLayout.WEST, game);
+		spring.putConstraint(SpringLayout.EAST, b, -30, SpringLayout.EAST, game);
 		spring.putConstraint(SpringLayout.SOUTH, b, 0, SpringLayout.SOUTH, game);
+		spring.putConstraint(SpringLayout.WEST, c, 300, SpringLayout.WEST, game);
+		spring.putConstraint(SpringLayout.EAST, c, -300, SpringLayout.EAST, game);
+		spring.putConstraint(SpringLayout.SOUTH, c, 0, SpringLayout.SOUTH, game);
 		
 		f.add(jsp);
 		f.setBackground(Color.red);
@@ -115,7 +129,7 @@ public class Hotello implements Runnable{
 		}  
 	
 	
-	public static JButton makeFloor(JPanel p){
+	public static JButton makeFloor(JLayeredPane game){
 		ImageIcon icon = new ImageIcon("resources/" + paths[pathsi]);
 		JButton b = new JButton(buttonidx,icon);
 		b.setBackground(Color.black);
@@ -126,7 +140,6 @@ public class Hotello implements Runnable{
 			  public void actionPerformed(ActionEvent e){  
 				  jp.show(b,b.getWidth()/2, b.getHeight()/2);
 				  clickedF = Integer.parseInt(b.getText());
-				  updateFloor(b);
 			          }  
 			      });  		
 		System.out.println(b.getText());
@@ -139,8 +152,8 @@ public class Hotello implements Runnable{
 			pathsi = 0;
 		}
 		
-		p.setVisible(true);
-		p.repaint();
+		game.setVisible(true);
+		game.repaint();
 		barr.add(b);
 		
 		return b;
@@ -153,27 +166,41 @@ public class Hotello implements Runnable{
 		
 	}
 	
-	public static void setSpringD(SpringLayout lay, JPanel p, ArrayList<JButton> arr){
+	public static void setSpringD(SpringLayout lay, JLayeredPane game, ArrayList<JButton> arr, JButton c){
 		Component b = arr.get(arr.size()-1);
-		lay.putConstraint(SpringLayout.WEST,b,10,SpringLayout.WEST,p);
-		lay.putConstraint(SpringLayout.EAST,b,-20,SpringLayout.EAST,p);
-		lay.putConstraint(SpringLayout.SOUTH,b,-ySpring,SpringLayout.SOUTH,p);
+		lay.putConstraint(SpringLayout.WEST,b,30,SpringLayout.WEST,game);
+		lay.putConstraint(SpringLayout.EAST,b,-30,SpringLayout.EAST,game);
+		lay.putConstraint(SpringLayout.SOUTH,b,-ySpring,SpringLayout.SOUTH,game);
 		ySpring += 150;
+		
+		//remove c parameter when implement part into AI
+		
+		
 	}
+	
+	
 
 
-	public static void updateFloor(JButton b){
+	public static void updateFloor(SpringLayout lay, JLayeredPane game,ArrayList<JButton> arr, JButton c){
 		//change iamge icon of the button to the floor with a resident inside
 		//alternate way:using spring layout to put each resident (harder)
-		ImageIcon org = (ImageIcon) b.getIcon();
-		ImageIcon img = new ImageIcon("resources/blue.png");
-		b.setIcon(img);
-		b.repaint();
-		Timer timer = new Timer(2000, new ActionListener() {
+//		ImageIcon org = (ImageIcon) b.getIcon();
+//		ImageIcon img = new ImageIcon("resources/blue.png");
+//		b.setIcon(img);
+//		b.repaint();
+		
+		Timer timer = new Timer(3000, new ActionListener() {
 		    public void actionPerformed(ActionEvent evt) {
-		    	b.setIcon(org);
-		    	b.repaint();
-		    }    
+		    	setCustD(spring,game,arr,c);
+		    }
+
+			private void setCustD(SpringLayout spring, JLayeredPane game, ArrayList<JButton> arr, JButton c) {
+				Integer a = Integer.parseInt(arr.get(arr.size()-1).getText());
+				lay.putConstraint(SpringLayout.WEST,c,500,SpringLayout.WEST,game);
+				lay.putConstraint(SpringLayout.EAST,c,-500,SpringLayout.EAST,game);
+				lay.putConstraint(SpringLayout.SOUTH,c,-a*152,SpringLayout.SOUTH,game);
+				
+			}    
 		});
 		timer.start();
 	}
